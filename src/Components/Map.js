@@ -2,9 +2,10 @@ import React from 'react';
 import 'leaflet/dist/leaflet.css'
 import styled from 'styled-components'
 
-// used to resolve the broken marker icon 
+import * as ELG from 'esri-leaflet-geocoder';
+
 import L from 'leaflet'
-delete L.Icon.Default.prototype._getIconUrl;
+delete L.Icon.Default.prototype._getIconUrl; // used to resolve the broken marker icon 
 
 const Wrapper = styled.div`
     width: ${props => props.width};
@@ -18,15 +19,16 @@ export default class Map extends React.Component{
         this.state = {
             restaraunts: props.restaraunt
         };
-
     }
 
     componentDidMount(){
 
+        // set up map display
         this.map = L.map('map', {
-            center:[38.05,-78.5], // where the map display starts
+            // where the map display starts
+            center:[38.05,-78.5], 
             zoom: 12.25,
-            zoomControl: false
+            zoomControl: true,
         });
 
         L.tileLayer('https://cartodb-basemaps-{s}.global.ssl.fastly.net/rastertiles/voyager_nolabels/{z}/{x}/{y}{r}.png', {
@@ -35,26 +37,37 @@ export default class Map extends React.Component{
             maxNativeZoom:17,
         }).addTo(this.map);
 
-        // used to resolve the broken marker image
+        // resolve the broken marker image
         L.Icon.Default.mergeOptions({
             iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
             iconUrl: require('leaflet/dist/images/marker-icon.png'),
             shadowUrl: require('leaflet/dist/images/marker-shadow.png'),
         });
 
-        console.log("props from componentDidMount", this.props.restaraunts[1].geometry.location.lat);
+        // geocoder search feature
+        const searchControl = new ELG.Geosearch().addTo(this.map);
+        const results = new L.LayerGroup().addTo(this.map);
+    
+        searchControl.on('results', function(data){
+            results.clearLayers();
+            for (let i = data.results.length - 1; i >= 0; i--) {
+                console.log(L.marker(data.results[i].latlng));
+                results.addLayer(L.marker(data.results[i].latlng));
+            }
+        });
 
+        // add markers for each restaraunt at the coordinates from google places
         for (let i = 0; i < this.props.restaraunts.length; i++) {
-            L.marker([this.props.restaraunts[i].geometry.location.lat, this.props.restaraunts[i].geometry.location.lng]).addTo(this.map);  
+            L.marker([this.props.restaraunts[i].geometry.location.lat, this.props.restaraunts[i].geometry.location.lng])
+            //.bindPopUp('test').openPopup()
+            .addTo(this.map);  
         }  
-
     }
 
     render(){
         console.log("props from render()", this.props);
-        return (<Wrapper width = "640px" height= "360px" id="map" />
+        return (<Wrapper width = "640px" height= "500px" id="map" />
        
         );
     }
-
 }

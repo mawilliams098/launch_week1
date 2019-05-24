@@ -4,6 +4,9 @@
   "private": true,
   "dependencies": {
     "axios": "^0.18.0",
+    "esri": "0.0.1-security",
+    "esri-leaflet": "^2.2.4",
+    "esri-leaflet-geocoder": "^2.2.14",
     "leaflet": "^1.5.1",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
