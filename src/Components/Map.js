@@ -27,7 +27,7 @@ export default class Map extends React.Component{
         this.map = L.map('map', {
             // where the map display starts
             center:[38.05,-78.5], 
-            zoom: 12.25,
+            zoom: 12.5,
             zoomControl: true,
         });
 
@@ -59,9 +59,9 @@ export default class Map extends React.Component{
         // add markers for each restaraunt at the coordinates from google places
         for (let i = 0; i < this.props.restaraunts.length; i++) {
             L.marker([this.props.restaraunts[i].geometry.location.lat, this.props.restaraunts[i].geometry.location.lng])
-            //.bindPopUp('test').openPopup()
-            .addTo(this.map);  
-        }  
+            .addTo(this.map)
+            .bindPopup('<strong>' + this.props.restaraunts[i].name + '</strong>' + '<br>' + this.props.restaraunts[i].formatted_address);  
+        };  
     }
 
     render(){

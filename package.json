@@ -3,6 +3,8 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@material-ui/core": "^4.0.0",
+    "@material-ui/icons": "^4.0.0",
     "axios": "^0.18.0",
     "esri": "0.0.1-security",
     "esri-leaflet": "^2.2.4",
@@ -13,7 +15,8 @@
     "react-leaflet": "^2.3.0",
     "react-scripts": "3.0.1",
     "react-search-field": "^1.0.0",
-    "styled-components": "^4.2.0"
+    "styled-components": "^4.2.0",
+    "typeface-roboto": "0.0.54"
   },
   "scripts": {
     "start": "react-scripts start",
